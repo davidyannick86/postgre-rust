@@ -13,7 +13,7 @@ async fn check_database_connection(database_url: &str) -> Result<(), sqlx::Error
 #[tokio::main]
 async fn main() -> Result<(), sqlx::Error> {
     let database_url = std::env::var("DATABASE_URL")
-        .unwrap_or_else(|_| "postgres://postgres:postgres@db:5432/users".to_string());
+        .unwrap_or_else(|_| "postgres://postgres:password@db:5432/tests".to_string());
 
     if std::env::args().any(|arg| arg == "--health-check") {
         return check_database_connection(&database_url).await;

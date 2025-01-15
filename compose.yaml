@@ -2,7 +2,7 @@ services:
   app:
     build: .
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/users
+      - DATABASE_URL=postgres://postgres:password@10.0.0.135:5432/tests
     depends_on:
       db:
         condition: service_healthy
@@ -11,7 +11,7 @@ services:
     image: postgres:15
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PASSWORD=password
       - POSTGRES_DB=users
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
