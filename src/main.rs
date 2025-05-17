@@ -9,18 +9,9 @@ use sqlx::postgres::PgPoolOptions;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    match dotenvy::dotenv() {
-        Ok(_) => println!("Loaded .env file"),
-        Err(e) => println!("Error loading .env file: {}", e),
-    }
+    dotenvy::dotenv().ok();
 
-    let database_url = match env::var("DATABASE_URL") {
-        Ok(url) => url,
-        Err(e) => {
-            eprintln!("Error getting DATABASE_URL: {}", e);
-            return Err(Box::<dyn std::error::Error>::from(e));
-        }
-    };
+    let database_url = env::var("DATABASE_URL")?;
 
     let pool_result = PgPoolOptions::new()
         .max_connections(5)
