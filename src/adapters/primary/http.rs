@@ -38,8 +38,6 @@ impl<R: UserRepo + Send + Sync + 'static> HttpAdapter<R> {
     }
 
     pub async fn run(self, addr: &str) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-        // Créer des wrappers non-génériques pour nos fonctions
-        // qui capturent le type R spécifique
         let http_adapter = Arc::new(self);
 
         let list_users =
@@ -52,7 +50,6 @@ impl<R: UserRepo + Send + Sync + 'static> HttpAdapter<R> {
         let app = Router::new()
             .route("/users", get(list_users))
             .route("/users", post(add_user))
-            // Share the HttpAdapter with Axum handlers
             .with_state(http_adapter.clone());
 
         let listener = TcpListener::bind(addr).await?;

@@ -11,8 +11,8 @@ date: Sat, 17 May 2025 05:24:59 GMT
 POST http://localhost:3000/users
 Content-Type: application/json
 {
-    "name": "John Doe 2",
-    "email": "john.doe@examp2le.com",
+    "name": "John Doe 2KK",
+    "email": "johnKKK.doe@examp2le.com",
     "password": "password123",
     "is_active": true
 }
