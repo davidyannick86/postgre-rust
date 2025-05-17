@@ -11,9 +11,7 @@ use serde::Deserialize;
 use tokio::net::TcpListener;
 
 use crate::{
-    application::user_service::UserService,
-    domain::model::User,
-    primary::http_port::HttpUserPort,
+    application::user_service::UserService, domain::model::User, primary::http_port::HttpUserPort,
     secondary::repo_port::UserRepo,
 };
 
@@ -36,27 +34,6 @@ impl<R: UserRepo + Send + Sync + 'static> HttpAdapter<R> {
         HttpAdapter {
             user_service: Arc::new(user_service),
         }
-    }
-
-    pub async fn run(self, addr: &str) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-        let http_adapter = Arc::new(self);
-
-        let list_users =
-            move |state: State<Arc<HttpAdapter<R>>>| async move { list_users_handler(state).await };
-
-        let add_user = move |state: State<Arc<HttpAdapter<R>>>, payload: Json<AddUserPayload>| async move {
-            add_user_handler(state, payload).await
-        };
-
-        let app = Router::new()
-            .route("/users", get(list_users))
-            .route("/users", post(add_user))
-            .with_state(http_adapter.clone());
-
-        let listener = TcpListener::bind(addr).await?;
-        println!("HTTP server listening on {}", addr);
-        axum::serve(listener, app).await?;
-        Ok(())
     }
 }
 
@@ -84,6 +61,30 @@ impl<R: UserRepo + Send + Sync + 'static> HttpUserPort for HttpAdapter<R> {
             Ok(user) => Ok(user),
             Err(e) => Err(e.to_string()),
         }
+    }
+
+    async fn run(
+        self,
+        addr: &str,
+    ) -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
+        let http_adapter = Arc::new(self);
+
+        let list_users =
+            move |state: State<Arc<HttpAdapter<R>>>| async move { list_users_handler(state).await };
+
+        let add_user = move |state: State<Arc<HttpAdapter<R>>>, payload: Json<AddUserPayload>| async move {
+            add_user_handler(state, payload).await
+        };
+
+        let app = Router::new()
+            .route("/users", get(list_users))
+            .route("/users", post(add_user))
+            .with_state(http_adapter.clone());
+
+        let listener = TcpListener::bind(addr).await?;
+        println!("HTTP server listening on {}", addr);
+        axum::serve(listener, app).await?;
+        Ok(())
     }
 }
 

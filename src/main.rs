@@ -2,7 +2,7 @@ use std::env;
 
 use rust_hexa_postgres::{
     application::user_service::UserService,
-    primary::{cli_adapter::CliAdapter, cli_port::CliPort},
+    primary::{cli_adapter::CliAdapter, cli_port::CliPort, http_port::HttpUserPort},
     secondary::psql_repo::PsqlRepo,
 };
 use sqlx::postgres::PgPoolOptions;

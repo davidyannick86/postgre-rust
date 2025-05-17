@@ -11,4 +11,8 @@ pub trait HttpUserPort {
         password: String,
         is_active: bool,
     ) -> Result<User, String>;
+    async fn run(
+        self,
+        addr: &str,
+    ) -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>>;
 }
