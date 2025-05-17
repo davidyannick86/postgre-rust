@@ -1,3 +1,5 @@
+use async_trait::async_trait;
+
 use crate::{
     application::user_service::UserService, primary::cli_port::CliPort,
     secondary::repo_port::UserRepo,
@@ -13,7 +15,7 @@ impl<R: UserRepo + Send + Sync> CliAdapter<R> {
     }
 }
 
-#[async_trait::async_trait]
+#[async_trait]
 impl<R: UserRepo + Send + Sync> CliPort for CliAdapter<R> {
     async fn list_users(&self) -> Result<(), String> {
         let users = self
