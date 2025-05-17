@@ -15,15 +15,6 @@ use crate::{
     secondary::repo_port::UserRepo,
 };
 
-#[allow(dead_code)]
-#[derive(Deserialize)]
-struct AddUserPayload {
-    name: String,
-    email: String,
-    password: String,
-    is_active: bool,
-}
-
 pub struct HttpAdapter<R: UserRepo + Send + Sync + 'static> {
     user_service: Arc<UserService<R>>,
 }
@@ -101,6 +92,15 @@ async fn list_users_handler(
             ))
         }
     }
+}
+
+#[allow(dead_code)]
+#[derive(Deserialize)]
+struct AddUserPayload {
+    name: String,
+    email: String,
+    password: String,
+    is_active: bool,
 }
 
 async fn add_user_handler(
