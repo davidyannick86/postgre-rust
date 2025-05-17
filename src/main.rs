@@ -23,6 +23,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // * CLI adapter
     let cli_adapter = CliAdapter::new(service);
+
+    cli_adapter
+        .add_user(
+            "John Doe".into(),
+            "john@example.com".into(),
+            "password123".into(),
+            true,
+        )
+        .await?;
+
     cli_adapter.list_users().await?;
 
     // * HTTP adapter
