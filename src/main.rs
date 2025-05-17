@@ -1,12 +1,11 @@
 use std::env;
 
-use ports::primary::cli::CliPort;
+use rust_hexa_postgres::{
+    application::user_service::UserService,
+    primary::{cli_adapter::CliAdapter, cli_port::CliPort},
+    secondary::psql_repo::PsqlRepo,
+};
 use sqlx::postgres::PgPoolOptions;
-
-mod adapters;
-mod application;
-mod domain;
-mod ports;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -28,23 +27,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .connect(&database_url)
         .await?;
 
-    let repo = adapters::secondary::psql_repo::PsqlRepo::new(pool_result);
-    let service = application::user_service::UserService::new(repo);
+    let repo = PsqlRepo::new(pool_result);
+    let service = UserService::new(repo);
 
-    let cli_adapter = adapters::primary::cli::CliAdapter::new(service);
-
-    let _user = cli_adapter
-        .add_user(
-            "Georgen+kl44".into(),
-            "djkjke@ldsa.jungledd".into(),
-            "Password".into(),
-            true,
-        )
-        .await;
-
+    // * CLI adapter
+    let cli_adapter = CliAdapter::new(service);
     cli_adapter.list_users().await?;
 
-    // let http_adapter = adapters::primary::http::HttpAdapter::new(service);
+    // * HTTP adapter
+    // let http_adapter = rust_hexa_postgres::primary::http_adapter::HttpAdapter::new(service);
     // let addr = "127.0.0.1:3000";
 
     // let _ = http_adapter.run(addr).await;

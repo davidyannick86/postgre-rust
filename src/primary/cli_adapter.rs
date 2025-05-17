@@ -1,6 +1,6 @@
 use crate::{
-    application::user_service::UserService,
-    ports::{primary::cli::CliPort, secondary::repo::UserRepo},
+    application::user_service::UserService, primary::cli_port::CliPort,
+    secondary::repo_port::UserRepo,
 };
 
 pub struct CliAdapter<R: UserRepo + Send + Sync> {

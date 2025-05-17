@@ -13,7 +13,8 @@ use tokio::net::TcpListener;
 use crate::{
     application::user_service::UserService,
     domain::model::User,
-    ports::{primary::http::HttpUserPort, secondary::repo::UserRepo},
+    primary::http_port::HttpUserPort,
+    secondary::repo_port::UserRepo,
 };
 
 #[allow(dead_code)]

@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use sqlx::query_as;
 
 use crate::domain::model::User;
-use crate::ports::secondary::repo::UserRepo;
+use crate::secondary::repo_port::UserRepo;
 
 pub struct PsqlRepo {
     repo: sqlx::PgPool,

@@ -1,5 +1,5 @@
 use crate::domain::model::User;
-use crate::ports::secondary::repo::UserRepo;
+use crate::secondary::repo_port::UserRepo;
 
 pub struct UserService<R: UserRepo> {
     user_repo: R,
