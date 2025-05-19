@@ -19,3 +19,5 @@ async-trait = "0.1.88"
 axum = { version = "0.8.4", features = ["macros"] }
 serde = { version = "1.0.219", features = ["derive"] }
 mockall = "0.13.1"
+tokio-postgres = "0.7.13"
+testcontainers = "0.24.0"
